@@ -1,4 +1,4 @@
-import { describe, test, expect, jest } from '@jest/globals';
+import { describe, expect, jest } from '@jest/globals';
 import fs from 'fs';
 import FileHelper from '../../src/fileHelper';
 
