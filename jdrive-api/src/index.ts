@@ -1,8 +1,9 @@
-import https from 'https';
-import fs from 'fs';
-import { logger } from './logger.js';
-import { Server } from 'socket.io';
-import Routes from './routes.js';
+const https = require('https');
+const fs = require('fs');
+import { Server, Socket } from 'socket.io';
+
+import { logger } from './logger';
+import Routes from './routes';
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,10 +24,10 @@ const io = new Server(server, {
 
 routes.setSocketInstance(io);
 
-io.on('connection', (socket) => logger.info(`someone connected: ${socket.id}`));
+io.on('connection', (socket: Socket) => logger.info(`someone connected: ${socket.id}`));
 
 const startServer = () => {
-  const { address, port } = server.address();
+  const { address, port } = server.address() as any;
   logger.info(`App running at https://${address}:${port}`);
 };
 
