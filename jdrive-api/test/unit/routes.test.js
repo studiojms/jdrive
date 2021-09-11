@@ -1,23 +1,33 @@
-import { describe, expect, jest } from '@jest/globals';
+import { describe, expect, jest, beforeEach } from '@jest/globals';
 
+import { logger } from '../../src/logger.js';
 import Routes from '../../src/routes.js';
+import UploadHandler from '../../src/uploadHandler.js';
+import TestUtil from '../util/testUtil.js';
 
 describe('Routes', () => {
+  const req = TestUtil.generateReadableStream(['some bytes']);
+  const res = TestUtil.generateWritableStream(() => {});
+
   const defaultParams = {
-    request: {
+    request: Object.assign(req, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
       method: '',
       body: {},
-    },
-    response: {
+    }),
+    response: Object.assign(res, {
       setHeader: jest.fn(),
       writeHead: jest.fn(),
       end: jest.fn(),
-    },
+    }),
     values: () => Object.values(defaultParams),
   };
+
+  beforeEach(() => {
+    jest.spyOn(logger, 'info').mockImplementation();
+  });
 
   describe('constructor', () => {
     it('should create a new instance with socket instance', () => {
@@ -122,6 +132,35 @@ describe('Routes', () => {
 
       expect(params.response.writeHead).toHaveBeenCalledWith(200);
       expect(params.response.end).toHaveBeenCalledWith(JSON.stringify(fileStatusesMock));
+    });
+  });
+
+  describe('post', () => {
+    it('should validate post route workflow', async () => {
+      const routes = new Routes('tmp');
+      const options = {
+        ...defaultParams,
+      };
+
+      options.request.method = 'POST';
+      options.request.url = '?socketId=1';
+
+      jest
+        .spyOn(UploadHandler.prototype, UploadHandler.prototype.registerEvents.name)
+        .mockImplementation((headers, onFinish) => {
+          const writable = TestUtil.generateWritableStream(() => {});
+          writable.on('finish', onFinish);
+
+          return writable;
+        });
+
+      await routes.handler(...options.values());
+
+      expect(UploadHandler.prototype.registerEvents).toHaveBeenCalled();
+      expect(options.response.writeHead).toHaveBeenCalledWith(200);
+
+      const expectedEndMessage = JSON.stringify({ result: 'Files successfully uploaded' });
+      expect(defaultParams.response.end).toHaveBeenCalledWith(expectedEndMessage);
     });
   });
 });

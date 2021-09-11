@@ -20,6 +20,7 @@
     "socket.io": "^4.2.0"
   },
   "devDependencies": {
+    "form-data": "^4.0.0",
     "jest": "^27.1.0"
   }
 }
