@@ -2,7 +2,7 @@ import BusBoy from 'busboy';
 import fs from 'fs';
 import { pipeline } from 'stream/promises';
 
-import { logger } from './logger';
+import { logger } from './logger.js';
 
 class UploadHandler {
   constructor(io, socketId, downloadsFolder, messageTimeDelay = 200) {
