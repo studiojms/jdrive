@@ -5,7 +5,7 @@ import { pipeline } from 'stream/promises';
 import { logger } from './logger.js';
 
 class UploadHandler {
-  constructor(io, socketId, downloadsFolder, messageTimeDelay = 200) {
+  constructor(io, socketId, downloadsFolder, messageTimeDelay = 100) {
     this.io = io;
     this.socketId = socketId;
     this.downloadsFolder = downloadsFolder;
