@@ -1,7 +1,8 @@
 class AppController {
-  constructor(connectionManager, viewManager) {
+  constructor(connectionManager, viewManager, dragNDropManager) {
     this.connectionManager = connectionManager;
     this.viewManager = viewManager;
+    this.dragNDropManager = dragNDropManager;
 
     this.uploadingFiles = new Map();
   }
@@ -10,6 +11,8 @@ class AppController {
     this.viewManager.configureBtnNewFileClick();
     this.viewManager.configureOnFileChange(this.onFileChange.bind(this));
     this.viewManager.configureModal();
+
+    this.dragNDropManager.initialize(this.onFileChange.bind(this));
 
     this.connectionManager.configureEvents(this.onProgress.bind(this));
 
@@ -38,6 +41,7 @@ class AppController {
   }
 
   async onFileChange(files) {
+    this.uploadingFiles.clear();
     this.viewManager.openModal();
     this.viewManager.updateProgress(0);
 
