@@ -26,4 +26,6 @@ class ConnectionManager {
   }
 }
 
+//continue: https://youtu.be/v31JI-cytFA?t=2400 40min
+
 export default ConnectionManager;
