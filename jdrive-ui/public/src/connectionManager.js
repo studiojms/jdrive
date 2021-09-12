@@ -16,6 +16,18 @@ class ConnectionManager {
     console.log('connected', this.socketId);
   }
 
+  async uploadFile(file) {
+    const formData = new FormData();
+    formData.append('files', file);
+
+    const response = await fetch(`${this.apiUrl}?socketId=${this.socketId}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    return response.json();
+  }
+
   async currentFiles() {
     try {
       const resp = await fetch(this.apiUrl);
@@ -25,7 +37,5 @@ class ConnectionManager {
     }
   }
 }
-
-//continue: https://youtu.be/v31JI-cytFA?t=2400 40min
 
 export default ConnectionManager;
