@@ -6,12 +6,16 @@
   "type": "module",
   "scripts": {
     "start": "mkdir -p downloads && node src/index.js",
+    "prod": "mkdir -p downloads && NODE_ENV=production node src/index.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-cache --coverage"
   },
   "author": "studiojms",
   "license": "MIT",
+  "engines": {
+    "node": "16"
+  },
   "dependencies": {
     "busboy": "^0.3.1",
     "pino": "^6.13.2",
